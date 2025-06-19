@@ -20,11 +20,9 @@ const MealCard = ({ meal, onEdit, onDelete }: MealCardProps) => {
           alt={meal.name}
           className="w-full h-48 object-cover"
         />
-        {meal.isNew && (
-          <Badge className="absolute top-3 left-3 bg-orange-500 text-white">
-            NEW
-          </Badge>
-        )}
+        <Badge className="absolute top-3 left-3 bg-orange-500 text-white">
+          ${meal.price}
+        </Badge>
         <div className="absolute top-3 right-3 flex gap-2">
           <Button
             size="sm"

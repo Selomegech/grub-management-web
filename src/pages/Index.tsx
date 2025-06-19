@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/Header';
@@ -22,8 +21,7 @@ const Index = () => {
         name: 'Bella Vista',
         logoUrl: 'https://images.unsplash.com/photo-1527576539890-dfa815648363?w=50&h=50&fit=crop',
         status: 'Open Now'
-      },
-      isNew: true
+      }
     },
     {
       id: '2',
@@ -49,8 +47,7 @@ const Index = () => {
         name: 'Morning Cafe',
         logoUrl: 'https://images.unsplash.com/photo-1527576539890-dfa815648363?w=50&h=50&fit=crop',
         status: 'Open Now'
-      },
-      isNew: true
+      }
     },
     {
       id: '4',
@@ -76,8 +73,7 @@ const Index = () => {
         name: 'Prime Grill',
         logoUrl: 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=50&h=50&fit=crop',
         status: 'Open Now'
-      },
-      isNew: true
+      }
     },
     {
       id: '6',
@@ -103,8 +99,7 @@ const Index = () => {
         name: 'Spice Palace',
         logoUrl: 'https://images.unsplash.com/photo-1500673922987-e212871fec22?w=50&h=50&fit=crop',
         status: 'Open Now'
-      },
-      isNew: true
+      }
     },
     {
       id: '8',
@@ -133,8 +128,7 @@ const Index = () => {
       price: newMeal.price || 12.99,
       rating: newMeal.rating!,
       imageUrl: newMeal.imageUrl!,
-      restaurant: newMeal.restaurant!,
-      isNew: true
+      restaurant: newMeal.restaurant!
     };
     setMeals(prev => [meal, ...prev]);
   };
@@ -170,19 +164,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      <Header onAddMeal={() => setIsAddModalOpen(true)} />
       <Hero />
       
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-center mb-12">
+          <div className="mb-12">
             <h2 className="text-3xl font-bold text-gray-800">Featured Meals</h2>
-            <Button 
-              onClick={() => setIsAddModalOpen(true)}
-              className="bg-orange-500 hover:bg-orange-600 text-white"
-            >
-              Add Food
-            </Button>
           </div>
           
           {featuredMeals.length === 0 ? (

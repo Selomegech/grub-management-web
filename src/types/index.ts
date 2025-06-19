@@ -13,7 +13,6 @@ export interface Meal {
   rating: number;
   imageUrl: string;
   restaurant: Restaurant;
-  isNew?: boolean;
 }
 
 export interface MealFormData {
