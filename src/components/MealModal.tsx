@@ -27,6 +27,18 @@ const mealSchema = z.object({
   imageUrl: z.string().url({
     message: "Image URL must be a valid URL.",
   }),
+  restaurantName: z.string().min(2, {
+    message: "Restaurant name must be at least 2 characters.",
+  }),
+  restaurantLogoUrl: z.string().url({
+    message: "Restaurant Logo URL must be a valid URL.",
+  }),
+  restaurantStatus: z.enum(['open', 'closed'], {
+    required_error: "Restaurant status is required.",
+    invalid_type_error: "Restaurant status must be 'open' or 'closed'.",
+  }),
+
+
 });
 
 type FormData = z.infer<typeof mealSchema>;
@@ -48,6 +60,9 @@ const MealModal = ({ isOpen, onClose, onSave, meal, mode, isLoading = false }: M
       price: meal?.price?.toString() || '',
       rating: meal?.rating?.toString() || '',
       imageUrl: meal?.imageUrl || '',
+      restaurantName: meal?.restaurantName || '',
+      restaurantLogoUrl: meal?.restaurantLogoUrl || '',
+      restaurantStatus: meal?.restaurantStatus || 'open',
     },
   });
 
@@ -66,6 +81,10 @@ const MealModal = ({ isOpen, onClose, onSave, meal, mode, isLoading = false }: M
         price: meal.price?.toString() || '',
         rating: meal.rating?.toString() || '',
         imageUrl: meal.imageUrl || '',
+        restaurantName: meal.restaurantName || '',
+        restaurantLogoUrl: meal.restaurantLogoUrl || '',
+        restaurantStatus: meal.restaurantStatus || 'open',
+
       });
     }
   }, [meal, reset]);
@@ -104,6 +123,30 @@ const MealModal = ({ isOpen, onClose, onSave, meal, mode, isLoading = false }: M
             <Input id="imageUrl" placeholder="Enter image URL" {...register("imageUrl")} />
             {errors.imageUrl && (
               <p className="text-sm text-red-500">{errors.imageUrl.message}</p>
+            )}
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="restaurantName">Restaurant Name</Label>
+            <Input id="restaurantName" placeholder="Enter restaurant name" {...register("restaurantName")} />
+            {errors.restaurantName && (
+              <p className="text-sm text-red-500">{errors.restaurantName.message}</p>
+            )}
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="restaurantLogoUrl">Restaurant Logo URL</Label>
+            <Input id="restaurantLogoUrl" placeholder="Enter restaurant logo URL" {...register("restaurantLogoUrl")} />
+            {errors.restaurantLogoUrl && (
+              <p className="text-sm text-red-500">{errors.restaurantLogoUrl.message}</p>
+            )}
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="restaurantStatus">Restaurant Status</Label>
+            <select id="restaurantStatus" {...register("restaurantStatus")} className="border rounded p-2 w-full">
+                <option value="open" style={{ color: '#f97316', fontWeight: 'small' }}>Open</option>
+                <option value="closed" style={{ color: '#f97316', fontWeight: 'small' }}>Closed</option>
+            </select>
+            {errors.restaurantStatus && (
+              <p className="text-sm text-red-500">{errors.restaurantStatus.message}</p>
             )}
           </div>
           

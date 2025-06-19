@@ -13,4 +13,7 @@ export interface Meal {
   rating: number;
   imageUrl: string;
   restaurant: Restaurant;
+  restaurantName: string;
+  restaurantLogoUrl: string;
+  restaurantStatus: 'open' | 'closed';
 }
