@@ -54,7 +54,7 @@ Make sure you have the following installed:
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/foodwagen.git
+git clone [https://github.com/your-username/foodwagen.git](https://github.com/Selomegech/grub-management-web.git)
 cd foodwagen
 ```
 
@@ -136,13 +136,7 @@ src/
 - **Typography**: Clear hierarchy with custom fonts
 - **Icons**: Lucide React icons for consistent visual language
 
-## 🚀 Deployment
 
-The project can be deployed to various platforms:
-
-- **Vercel**: Connect your GitHub repository for automatic deployments
-- **Netlify**: Drag and drop the build folder or connect via Git
-- **GitHub Pages**: Use the built-in GitHub Actions workflow
 
 ## 📱 Mobile Responsiveness Implementation
 
@@ -166,17 +160,9 @@ The responsive design is achieved through:
 
 4. **Mobile-First Approach**: Base styles for mobile, then enhanced for larger screens
 
-## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
-## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
@@ -187,4 +173,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Built with ❤️ by [Your Name]
+Built with ❤️ by [Solome Getachew]
