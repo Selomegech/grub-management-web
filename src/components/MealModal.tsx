@@ -5,7 +5,27 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Meal, MealFormData, FormErrors } from '@/types';
+import { Meal } from '@/types';
+
+interface MealFormData {
+  foodName: string;
+  foodRating: string;
+  foodPrice: string;
+  foodImageUrl: string;
+  restaurantName: string;
+  restaurantLogoUrl: string;
+  restaurantStatus: 'Open Now' | 'Closed';
+}
+
+interface FormErrors {
+  'food-name-error'?: string;
+  'food-rating-error'?: string;
+  'food-price-error'?: string;
+  'food-image-error'?: string;
+  'restaurant-name-error'?: string;
+  'restaurant-logo-error'?: string;
+  'restaurant-status-error'?: string;
+}
 
 interface MealModalProps {
   isOpen: boolean;
@@ -19,6 +39,7 @@ const MealModal = ({ isOpen, onClose, onSave, meal, mode }: MealModalProps) => {
   const [formData, setFormData] = useState<MealFormData>({
     foodName: '',
     foodRating: '',
+    foodPrice: '',
     foodImageUrl: '',
     restaurantName: '',
     restaurantLogoUrl: '',
@@ -32,6 +53,7 @@ const MealModal = ({ isOpen, onClose, onSave, meal, mode }: MealModalProps) => {
       setFormData({
         foodName: meal.name,
         foodRating: meal.rating.toString(),
+        foodPrice: meal.price.toString(),
         foodImageUrl: meal.imageUrl,
         restaurantName: meal.restaurant.name,
         restaurantLogoUrl: meal.restaurant.logoUrl,
@@ -41,6 +63,7 @@ const MealModal = ({ isOpen, onClose, onSave, meal, mode }: MealModalProps) => {
       setFormData({
         foodName: '',
         foodRating: '',
+        foodPrice: '',
         foodImageUrl: '',
         restaurantName: '',
         restaurantLogoUrl: '',
@@ -61,6 +84,12 @@ const MealModal = ({ isOpen, onClose, onSave, meal, mode }: MealModalProps) => {
       newErrors['food-rating-error'] = 'Food Rating must be a number';
     } else if (isNaN(Number(formData.foodRating)) || Number(formData.foodRating) < 0 || Number(formData.foodRating) > 5) {
       newErrors['food-rating-error'] = 'Food Rating must be a number between 0 and 5';
+    }
+
+    if (!formData.foodPrice) {
+      newErrors['food-price-error'] = 'Food Price is required';
+    } else if (isNaN(Number(formData.foodPrice)) || Number(formData.foodPrice) < 0) {
+      newErrors['food-price-error'] = 'Food Price must be a positive number';
     }
 
     if (!formData.foodImageUrl.trim()) {
@@ -94,15 +123,14 @@ const MealModal = ({ isOpen, onClose, onSave, meal, mode }: MealModalProps) => {
       id: meal?.id || Date.now().toString(),
       name: formData.foodName,
       rating: Number(formData.foodRating),
+      price: Number(formData.foodPrice),
       imageUrl: formData.foodImageUrl,
-      price: meal?.price || 12.99, // Default price if new
       restaurant: {
         id: meal?.restaurant.id || Date.now().toString(),
         name: formData.restaurantName,
         logoUrl: formData.restaurantLogoUrl,
         status: formData.restaurantStatus
-      },
-      isNew: mode === 'add'
+      }
     };
 
     onSave(mealData);
@@ -162,6 +190,26 @@ const MealModal = ({ isOpen, onClose, onSave, meal, mode }: MealModalProps) => {
             {errors['food-rating-error'] && (
               <div id="food-rating-error" className="text-red-500 text-sm mt-1">
                 {errors['food-rating-error']}
+              </div>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="food_price">Food Price</Label>
+            <Input
+              id="food_price"
+              name="food_price"
+              type="number"
+              min="0"
+              step="0.01"
+              value={formData.foodPrice}
+              onChange={(e) => handleInputChange('foodPrice', e.target.value)}
+              placeholder="Enter price"
+              className={errors['food-price-error'] ? 'border-red-500' : ''}
+            />
+            {errors['food-price-error'] && (
+              <div id="food-price-error" className="text-red-500 text-sm mt-1">
+                {errors['food-price-error']}
               </div>
             )}
           </div>

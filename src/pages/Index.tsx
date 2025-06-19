@@ -1,5 +1,8 @@
-import React, { useState, useMemo } from 'react';
+
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Search } from 'lucide-react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import MealCard from '@/components/MealCard';
@@ -7,130 +10,28 @@ import MealModal from '@/components/MealModal';
 import DeleteMealModal from '@/components/DeleteMealModal';
 import Footer from '@/components/Footer';
 import { Meal } from '@/types';
+import { useMeals, useSearchMeals, useCreateMeal, useUpdateMeal, useDeleteMeal } from '@/hooks/useMeals';
 
 const Index = () => {
-  const [meals, setMeals] = useState<Meal[]>([
-    {
-      id: '1',
-      name: 'Rice Lasagna',
-      price: 12.99,
-      rating: 4.5,
-      imageUrl: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=300&fit=crop',
-      restaurant: {
-        id: '1',
-        name: 'Bella Vista',
-        logoUrl: 'https://images.unsplash.com/photo-1527576539890-dfa815648363?w=50&h=50&fit=crop',
-        status: 'Open Now'
-      }
-    },
-    {
-      id: '2',
-      name: 'Mixed Avocado Smoothie',
-      price: 8.50,
-      rating: 4.8,
-      imageUrl: 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=400&h=300&fit=crop',
-      restaurant: {
-        id: '2',
-        name: 'Green Garden',
-        logoUrl: 'https://images.unsplash.com/photo-1500673922987-e212871fec22?w=50&h=50&fit=crop',
-        status: 'Open Now'
-      }
-    },
-    {
-      id: '3',
-      name: 'Pancakes',
-      price: 7.25,
-      rating: 4.2,
-      imageUrl: 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=300&fit=crop',
-      restaurant: {
-        id: '3',
-        name: 'Morning Cafe',
-        logoUrl: 'https://images.unsplash.com/photo-1527576539890-dfa815648363?w=50&h=50&fit=crop',
-        status: 'Open Now'
-      }
-    },
-    {
-      id: '4',
-      name: 'Cupcake',
-      price: 4.99,
-      rating: 4.6,
-      imageUrl: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=300&fit=crop',
-      restaurant: {
-        id: '4',
-        name: 'Sweet Dreams',
-        logoUrl: 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=50&h=50&fit=crop',
-        status: 'Closed'
-      }
-    },
-    {
-      id: '5',
-      name: 'Grilled Steak',
-      price: 24.99,
-      rating: 4.9,
-      imageUrl: 'https://images.unsplash.com/photo-1500673922987-e212871fec22?w=400&h=300&fit=crop',
-      restaurant: {
-        id: '5',
-        name: 'Prime Grill',
-        logoUrl: 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=50&h=50&fit=crop',
-        status: 'Open Now'
-      }
-    },
-    {
-      id: '6',
-      name: 'Pasta with Potatoes',
-      price: 16.75,
-      rating: 4.3,
-      imageUrl: 'https://images.unsplash.com/photo-1527576539890-dfa815648363?w=400&h=300&fit=crop',
-      restaurant: {
-        id: '6',
-        name: 'Italian Corner',
-        logoUrl: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=50&h=50&fit=crop',
-        status: 'Open Now'
-      }
-    },
-    {
-      id: '7',
-      name: 'Indian Spicy Soup',
-      price: 11.50,
-      rating: 4.4,
-      imageUrl: 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=400&h=300&fit=crop',
-      restaurant: {
-        id: '7',
-        name: 'Spice Palace',
-        logoUrl: 'https://images.unsplash.com/photo-1500673922987-e212871fec22?w=50&h=50&fit=crop',
-        status: 'Open Now'
-      }
-    },
-    {
-      id: '8',
-      name: 'Indian Omelet',
-      price: 9.99,
-      rating: 4.1,
-      imageUrl: 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400&h=300&fit=crop',
-      restaurant: {
-        id: '8',
-        name: 'Spice Palace',
-        logoUrl: 'https://images.unsplash.com/photo-1527576539890-dfa815648363?w=50&h=50&fit=crop',
-        status: 'Open Now'
-      }
-    }
-  ]);
-
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState<Meal | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // API hooks
+  const { data: meals = [], isLoading, error } = useMeals();
+  const { data: searchResults = [] } = useSearchMeals(searchTerm);
+  const createMealMutation = useCreateMeal();
+  const updateMealMutation = useUpdateMeal();
+  const deleteMealMutation = useDeleteMeal();
+
+  // Use search results if searching, otherwise use all meals
+  const displayMeals = searchTerm.trim() ? searchResults : meals;
+  const featuredMeals = displayMeals.slice(0, 8);
 
   const handleAddMeal = (newMeal: Partial<Meal>) => {
-    const meal: Meal = {
-      id: Date.now().toString(),
-      name: newMeal.name!,
-      price: newMeal.price || 12.99,
-      rating: newMeal.rating!,
-      imageUrl: newMeal.imageUrl!,
-      restaurant: newMeal.restaurant!
-    };
-    setMeals(prev => [meal, ...prev]);
+    createMealMutation.mutate(newMeal);
   };
 
   const handleEditMeal = (meal: Meal) => {
@@ -139,11 +40,12 @@ const Index = () => {
   };
 
   const handleUpdateMeal = (updatedMeal: Partial<Meal>) => {
-    setMeals(prev => prev.map(meal => 
-      meal.id === selectedMeal?.id 
-        ? { ...meal, ...updatedMeal }
-        : meal
-    ));
+    if (selectedMeal) {
+      updateMealMutation.mutate({ 
+        id: selectedMeal.id, 
+        meal: updatedMeal 
+      });
+    }
     setSelectedMeal(null);
   };
 
@@ -154,13 +56,27 @@ const Index = () => {
 
   const handleConfirmDelete = () => {
     if (selectedMeal) {
-      setMeals(prev => prev.filter(meal => meal.id !== selectedMeal.id));
+      deleteMealMutation.mutate(selectedMeal.id);
     }
     setSelectedMeal(null);
     setIsDeleteModalOpen(false);
   };
 
-  const featuredMeals = useMemo(() => meals.slice(0, 8), [meals]);
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Search is handled automatically by the useSearchMeals hook
+  };
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Something went wrong</h2>
+          <p className="text-gray-600">Failed to load meals. Please try again later.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -170,12 +86,35 @@ const Index = () => {
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-800">Featured Meals</h2>
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <h2 className="text-3xl font-bold text-gray-800">Featured Meals</h2>
+              
+              {/* Search Bar */}
+              <form onSubmit={handleSearch} className="flex gap-2 w-full md:w-auto">
+                <div className="relative flex-1 md:w-80">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Input
+                    id="search-bar"
+                    type="text"
+                    placeholder="Search meals..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+              </form>
+            </div>
           </div>
           
-          {featuredMeals.length === 0 ? (
+          {isLoading ? (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">Loading meals...</p>
+            </div>
+          ) : featuredMeals.length === 0 ? (
             <div className="empty-state-message text-center py-12">
-              <p className="text-gray-500 text-lg">No items available</p>
+              <p className="text-gray-500 text-lg">
+                {searchTerm.trim() ? 'No meals found matching your search' : 'No items available'}
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -190,7 +129,7 @@ const Index = () => {
             </div>
           )}
           
-          {featuredMeals.length > 0 && (
+          {featuredMeals.length > 0 && displayMeals.length > 8 && (
             <div className="text-center mt-12">
               <Button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3">
                 View More

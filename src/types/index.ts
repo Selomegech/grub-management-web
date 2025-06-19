@@ -14,21 +14,3 @@ export interface Meal {
   imageUrl: string;
   restaurant: Restaurant;
 }
-
-export interface MealFormData {
-  foodName: string;
-  foodRating: string;
-  foodImageUrl: string;
-  restaurantName: string;
-  restaurantLogoUrl: string;
-  restaurantStatus: 'Open Now' | 'Closed';
-}
-
-export interface FormErrors {
-  'food-name-error'?: string;
-  'food-rating-error'?: string;
-  'food-image-error'?: string;
-  'restaurant-name-error'?: string;
-  'restaurant-logo-error'?: string;
-  'restaurant-status-error'?: string;
-}
