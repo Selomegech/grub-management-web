@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, MapPin } from 'lucide-react';
+import { Search, MapPin, Truck, Package } from 'lucide-react';
 
 interface HeroProps {
   onSearch: (searchTerm: string) => void;
@@ -37,6 +37,18 @@ const Hero = ({ onSearch, onScrollToMeals }: HeroProps) => {
             </p>
             
             <div className="bg-white rounded-lg p-4 shadow-lg">
+              {/* Delivery and Pickup tabs */}
+              <div className="flex gap-4 mb-4">
+                <div className="flex items-center gap-2 bg-orange-50 text-orange-600 px-4 py-2 rounded-lg">
+                  <Truck className="w-5 h-5" />
+                  <span className="font-medium">Delivery</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-600 px-4 py-2">
+                  <Package className="w-5 h-5" />
+                  <span className="font-medium">Pickup</span>
+                </div>
+              </div>
+              
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1 relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />

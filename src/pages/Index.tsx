@@ -1,7 +1,7 @@
-
 import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Search } from 'lucide-react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
@@ -23,7 +23,7 @@ const Index = () => {
 
   // API hooks
   const { data: meals = [], isLoading, error } = useMeals();
-  const { data: searchResults = [] } = useSearchMeals(searchTerm);
+  const { data: searchResults = [], isLoading: isSearchLoading } = useSearchMeals(searchTerm);
   const createMealMutation = useCreateMeal();
   const updateMealMutation = useUpdateMeal();
   const deleteMealMutation = useDeleteMeal();
@@ -31,6 +31,7 @@ const Index = () => {
   // Use search results if searching, otherwise use all meals
   const displayMeals = searchTerm.trim() ? searchResults : meals;
   const featuredMeals = displayMeals.slice(0, 8);
+  const isDataLoading = searchTerm.trim() ? isSearchLoading : isLoading;
 
   const handleAddMeal = (newMeal: Partial<Meal>) => {
     createMealMutation.mutate(newMeal);
@@ -77,6 +78,46 @@ const Index = () => {
     mealsRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const renderMealGrid = () => {
+    if (isDataLoading) {
+      return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <div key={index} className="bg-white rounded-lg shadow-md p-4">
+              <Skeleton className="w-full h-48 rounded-lg mb-4" />
+              <Skeleton className="h-6 w-3/4 mb-2" />
+              <Skeleton className="h-4 w-1/2 mb-2" />
+              <Skeleton className="h-4 w-1/3" />
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (featuredMeals.length === 0) {
+      return (
+        <div className="empty-state-message text-center py-12">
+          <p className="text-gray-500 text-lg">
+            {searchTerm.trim() ? 'No meals found matching your search' : 'No items available'}
+          </p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {featuredMeals.map((meal) => (
+          <MealCard
+            key={meal.id}
+            meal={meal}
+            onEdit={handleEditMeal}
+            onDelete={handleDeleteMeal}
+          />
+        ))}
+      </div>
+    );
+  };
+
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -116,30 +157,9 @@ const Index = () => {
             </div>
           </div>
           
-          {isLoading ? (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">Loading meals...</p>
-            </div>
-          ) : featuredMeals.length === 0 ? (
-            <div className="empty-state-message text-center py-12">
-              <p className="text-gray-500 text-lg">
-                {searchTerm.trim() ? 'No meals found matching your search' : 'No items available'}
-              </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {featuredMeals.map((meal) => (
-                <MealCard
-                  key={meal.id}
-                  meal={meal}
-                  onEdit={handleEditMeal}
-                  onDelete={handleDeleteMeal}
-                />
-              ))}
-            </div>
-          )}
+          {renderMealGrid()}
           
-          {featuredMeals.length > 0 && displayMeals.length > 8 && (
+          {featuredMeals.length > 0 && displayMeals.length > 8 && !isDataLoading && (
             <div className="text-center mt-12">
               <Button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 shadow-lg hover:shadow-xl transition-shadow">
                 View More
@@ -156,6 +176,7 @@ const Index = () => {
         onClose={() => setIsAddModalOpen(false)}
         onSave={handleAddMeal}
         mode="add"
+        isLoading={createMealMutation.isPending}
       />
 
       <MealModal
@@ -167,6 +188,7 @@ const Index = () => {
         onSave={handleUpdateMeal}
         meal={selectedMeal}
         mode="edit"
+        isLoading={updateMealMutation.isPending}
       />
 
       <DeleteMealModal
@@ -177,6 +199,7 @@ const Index = () => {
         }}
         onConfirm={handleConfirmDelete}
         meal={selectedMeal}
+        isLoading={deleteMealMutation.isPending}
       />
     </div>
   );
