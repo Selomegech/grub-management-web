@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
@@ -18,6 +18,8 @@ const Index = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState<Meal | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+
+  const mealsRef = useRef<HTMLElement>(null);
 
   // API hooks
   const { data: meals = [], isLoading, error } = useMeals();
@@ -67,6 +69,14 @@ const Index = () => {
     // Search is handled automatically by the useSearchMeals hook
   };
 
+  const handleHeroSearch = (searchQuery: string) => {
+    setSearchTerm(searchQuery);
+  };
+
+  const scrollToMeals = () => {
+    mealsRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -81,9 +91,9 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header onAddMeal={() => setIsAddModalOpen(true)} />
-      <Hero />
+      <Hero onSearch={handleHeroSearch} onScrollToMeals={scrollToMeals} />
       
-      <section className="py-16 px-4">
+      <section ref={mealsRef} className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -131,7 +141,7 @@ const Index = () => {
           
           {featuredMeals.length > 0 && displayMeals.length > 8 && (
             <div className="text-center mt-12">
-              <Button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3">
+              <Button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 shadow-lg hover:shadow-xl transition-shadow">
                 View More
               </Button>
             </div>

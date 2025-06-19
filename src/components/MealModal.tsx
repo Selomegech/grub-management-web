@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -148,161 +149,163 @@ const MealModal = ({ isOpen, onClose, onSave, meal, mode }: MealModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md mx-auto">
+      <DialogContent className="max-w-md mx-auto max-h-[90vh]">
         <DialogHeader>
           <DialogTitle className="text-orange-500">
             {mode === 'add' ? 'Add a meal' : 'Edit Meal'}
           </DialogTitle>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="food_name">Food Name</Label>
-            <Input
-              id="food_name"
-              name="food_name"
-              value={formData.foodName}
-              onChange={(e) => handleInputChange('foodName', e.target.value)}
-              placeholder="Enter food name"
-              className={errors['food-name-error'] ? 'border-red-500' : ''}
-            />
-            {errors['food-name-error'] && (
-              <div id="food-name-error" className="text-red-500 text-sm mt-1">
-                {errors['food-name-error']}
-              </div>
-            )}
-          </div>
+        <ScrollArea className="h-full max-h-[70vh] pr-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="food_name">Food Name</Label>
+              <Input
+                id="food_name"
+                name="food_name"
+                value={formData.foodName}
+                onChange={(e) => handleInputChange('foodName', e.target.value)}
+                placeholder="Enter food name"
+                className={errors['food-name-error'] ? 'border-red-500' : ''}
+              />
+              {errors['food-name-error'] && (
+                <div id="food-name-error" className="text-red-500 text-sm mt-1">
+                  {errors['food-name-error']}
+                </div>
+              )}
+            </div>
 
-          <div>
-            <Label htmlFor="food_rating">Food Rating</Label>
-            <Input
-              id="food_rating"
-              name="food_rating"
-              type="number"
-              min="0"
-              max="5"
-              step="0.1"
-              value={formData.foodRating}
-              onChange={(e) => handleInputChange('foodRating', e.target.value)}
-              placeholder="Enter rating (0-5)"
-              className={errors['food-rating-error'] ? 'border-red-500' : ''}
-            />
-            {errors['food-rating-error'] && (
-              <div id="food-rating-error" className="text-red-500 text-sm mt-1">
-                {errors['food-rating-error']}
-              </div>
-            )}
-          </div>
+            <div>
+              <Label htmlFor="food_rating">Food Rating</Label>
+              <Input
+                id="food_rating"
+                name="food_rating"
+                type="number"
+                min="0"
+                max="5"
+                step="0.1"
+                value={formData.foodRating}
+                onChange={(e) => handleInputChange('foodRating', e.target.value)}
+                placeholder="Enter rating (0-5)"
+                className={errors['food-rating-error'] ? 'border-red-500' : ''}
+              />
+              {errors['food-rating-error'] && (
+                <div id="food-rating-error" className="text-red-500 text-sm mt-1">
+                  {errors['food-rating-error']}
+                </div>
+              )}
+            </div>
 
-          <div>
-            <Label htmlFor="food_price">Food Price</Label>
-            <Input
-              id="food_price"
-              name="food_price"
-              type="number"
-              min="0"
-              step="0.01"
-              value={formData.foodPrice}
-              onChange={(e) => handleInputChange('foodPrice', e.target.value)}
-              placeholder="Enter price"
-              className={errors['food-price-error'] ? 'border-red-500' : ''}
-            />
-            {errors['food-price-error'] && (
-              <div id="food-price-error" className="text-red-500 text-sm mt-1">
-                {errors['food-price-error']}
-              </div>
-            )}
-          </div>
+            <div>
+              <Label htmlFor="food_price">Food Price</Label>
+              <Input
+                id="food_price"
+                name="food_price"
+                type="number"
+                min="0"
+                step="0.01"
+                value={formData.foodPrice}
+                onChange={(e) => handleInputChange('foodPrice', e.target.value)}
+                placeholder="Enter price"
+                className={errors['food-price-error'] ? 'border-red-500' : ''}
+              />
+              {errors['food-price-error'] && (
+                <div id="food-price-error" className="text-red-500 text-sm mt-1">
+                  {errors['food-price-error']}
+                </div>
+              )}
+            </div>
 
-          <div>
-            <Label htmlFor="food_image">Food Image URL</Label>
-            <Input
-              id="food_image"
-              name="food_image"
-              value={formData.foodImageUrl}
-              onChange={(e) => handleInputChange('foodImageUrl', e.target.value)}
-              placeholder="Enter image URL"
-              className={errors['food-image-error'] ? 'border-red-500' : ''}
-            />
-            {errors['food-image-error'] && (
-              <div id="food-image-error" className="text-red-500 text-sm mt-1">
-                {errors['food-image-error']}
-              </div>
-            )}
-          </div>
+            <div>
+              <Label htmlFor="food_image">Food Image URL</Label>
+              <Input
+                id="food_image"
+                name="food_image"
+                value={formData.foodImageUrl}
+                onChange={(e) => handleInputChange('foodImageUrl', e.target.value)}
+                placeholder="Enter image URL"
+                className={errors['food-image-error'] ? 'border-red-500' : ''}
+              />
+              {errors['food-image-error'] && (
+                <div id="food-image-error" className="text-red-500 text-sm mt-1">
+                  {errors['food-image-error']}
+                </div>
+              )}
+            </div>
 
-          <div>
-            <Label htmlFor="restaurant_name">Restaurant Name</Label>
-            <Input
-              id="restaurant_name"
-              name="restaurant_name"
-              value={formData.restaurantName}
-              onChange={(e) => handleInputChange('restaurantName', e.target.value)}
-              placeholder="Enter restaurant name"
-              className={errors['restaurant-name-error'] ? 'border-red-500' : ''}
-            />
-            {errors['restaurant-name-error'] && (
-              <div id="restaurant-name-error" className="text-red-500 text-sm mt-1">
-                {errors['restaurant-name-error']}
-              </div>
-            )}
-          </div>
+            <div>
+              <Label htmlFor="restaurant_name">Restaurant Name</Label>
+              <Input
+                id="restaurant_name"
+                name="restaurant_name"
+                value={formData.restaurantName}
+                onChange={(e) => handleInputChange('restaurantName', e.target.value)}
+                placeholder="Enter restaurant name"
+                className={errors['restaurant-name-error'] ? 'border-red-500' : ''}
+              />
+              {errors['restaurant-name-error'] && (
+                <div id="restaurant-name-error" className="text-red-500 text-sm mt-1">
+                  {errors['restaurant-name-error']}
+                </div>
+              )}
+            </div>
 
-          <div>
-            <Label htmlFor="restaurant_logo">Restaurant Logo URL</Label>
-            <Input
-              id="restaurant_logo"
-              name="restaurant_logo"
-              value={formData.restaurantLogoUrl}
-              onChange={(e) => handleInputChange('restaurantLogoUrl', e.target.value)}
-              placeholder="Enter logo URL"
-              className={errors['restaurant-logo-error'] ? 'border-red-500' : ''}
-            />
-            {errors['restaurant-logo-error'] && (
-              <div id="restaurant-logo-error" className="text-red-500 text-sm mt-1">
-                {errors['restaurant-logo-error']}
-              </div>
-            )}
-          </div>
+            <div>
+              <Label htmlFor="restaurant_logo">Restaurant Logo URL</Label>
+              <Input
+                id="restaurant_logo"
+                name="restaurant_logo"
+                value={formData.restaurantLogoUrl}
+                onChange={(e) => handleInputChange('restaurantLogoUrl', e.target.value)}
+                placeholder="Enter logo URL"
+                className={errors['restaurant-logo-error'] ? 'border-red-500' : ''}
+              />
+              {errors['restaurant-logo-error'] && (
+                <div id="restaurant-logo-error" className="text-red-500 text-sm mt-1">
+                  {errors['restaurant-logo-error']}
+                </div>
+              )}
+            </div>
 
-          <div>
-            <Label htmlFor="restaurant_status">Restaurant Status</Label>
-            <Select
-              value={formData.restaurantStatus}
-              onValueChange={(value: 'Open Now' | 'Closed') => handleInputChange('restaurantStatus', value)}
-            >
-              <SelectTrigger className={errors['restaurant-status-error'] ? 'border-red-500' : ''}>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-white">
-                <SelectItem value="Open Now">Open Now</SelectItem>
-                <SelectItem value="Closed">Closed</SelectItem>
-              </SelectContent>
-            </Select>
-            {errors['restaurant-status-error'] && (
-              <div id="restaurant-status-error" className="text-red-500 text-sm mt-1">
-                {errors['restaurant-status-error']}
-              </div>
-            )}
-          </div>
+            <div>
+              <Label htmlFor="restaurant_status">Restaurant Status</Label>
+              <Select
+                value={formData.restaurantStatus}
+                onValueChange={(value: 'Open Now' | 'Closed') => handleInputChange('restaurantStatus', value)}
+              >
+                <SelectTrigger className={errors['restaurant-status-error'] ? 'border-red-500' : ''}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="Open Now">Open Now</SelectItem>
+                  <SelectItem value="Closed">Closed</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors['restaurant-status-error'] && (
+                <div id="restaurant-status-error" className="text-red-500 text-sm mt-1">
+                  {errors['restaurant-status-error']}
+                </div>
+              )}
+            </div>
 
-          <div className="flex gap-3 pt-4">
-            <Button
-              type="submit"
-              className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
-            >
-              Save
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              className="flex-1"
-            >
-              Cancel
-            </Button>
-          </div>
-        </form>
+            <div className="flex gap-3 pt-4">
+              <Button
+                type="submit"
+                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white shadow-lg hover:shadow-xl transition-shadow"
+              >
+                Save
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onClose}
+                className="flex-1 shadow-md hover:shadow-lg transition-shadow"
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

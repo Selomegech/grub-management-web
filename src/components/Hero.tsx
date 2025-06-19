@@ -4,9 +4,25 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, MapPin } from 'lucide-react';
 
-const Hero = () => {
+interface HeroProps {
+  onSearch: (searchTerm: string) => void;
+  onScrollToMeals: () => void;
+}
+
+const Hero = ({ onSearch, onScrollToMeals }: HeroProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [location, setLocation] = useState('');
+
+  const handleSearch = () => {
+    onSearch(searchQuery);
+    onScrollToMeals();
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   return (
     <section className="bg-gradient-to-r from-orange-400 to-orange-500 py-20 px-4">
@@ -29,6 +45,7 @@ const Hero = () => {
                     placeholder="Search for food or restaurant"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={handleKeyPress}
                     className="pl-10 border-0 focus:ring-0 text-gray-700"
                   />
                 </div>
@@ -41,7 +58,10 @@ const Hero = () => {
                     className="pl-10 border-0 focus:ring-0 text-gray-700"
                   />
                 </div>
-                <Button className="bg-orange-500 hover:bg-orange-600 text-white px-8">
+                <Button 
+                  onClick={handleSearch}
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-8 shadow-lg hover:shadow-xl transition-shadow"
+                >
                   Find Food
                 </Button>
               </div>
