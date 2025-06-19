@@ -1,6 +1,8 @@
 
 # 🍽️ FoodWagen - Food Recipe Website
 
+
+
 A modern, responsive food recipe website built with React, TypeScript, and Tailwind CSS. Discover delicious meals, manage your favorite recipes, and explore a wide variety of cuisines all in one place.
 
 ![FoodWagen](./public/preview.png)
